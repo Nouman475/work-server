@@ -1,10 +1,14 @@
-const dotenv = require('dotenv').config();
+const dotenv = require("dotenv").config();
 
 const vars = {
-    PORT: process.env.PORT,
-    MONGO_CONNECTION_STRING: process.env.MONGO_CONNECTION_STRING,
-    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
-    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET
-}
+  PORT: process.env.PORT,
+  MONGO_CONNECTION_STRING: process.env.MONGO_CONNECTION_STRING,
+  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
+  COINPAYMENTS_PUBLIC_KEY: process.env.COINPAYMENTS_PUBLIC_KEY,
+  COINPAYMENTS_PRIVATE_KEY: process.env.COINPAYMENTS_PRIVATE_KEY,
+  COINPAYMENTS_MERCHANT_KEY: process.env.COINPAYMENTS_MERCHANT_KEY,
+  COINPAYMENTS_IPN_SECRET: process.env.COINPAYMENTS_IPN_SECRET,
+};
 
 module.exports = vars;
