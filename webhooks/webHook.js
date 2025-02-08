@@ -2,6 +2,8 @@ const crypto = require("crypto");
 
 const { COINPAYMENTS_IPN_SECRET } = require("../var");
 
+console.log(COINPAYMENTS_IPN_SECRET);
+
 const coinpaymentHook = (req, res) => {
   const receivedHMAC = req.headers["hmac"];
 
