@@ -1,4 +1,13 @@
+const { default: Coinpayments } = require("coinpayments");
 const User = require("../Models/user");
+const { COINPAYMENTS_PUBLIC_KEY, COINPAYMENTS_PRIVATE_KEY } = require("../var");
+
+const credentials = {
+  key: COINPAYMENTS_PUBLIC_KEY,
+  secret: COINPAYMENTS_PRIVATE_KEY,
+};
+
+const client = new Coinpayments(credentials);
 
 const depositAmount = async (req, res) => {
   try {
@@ -31,36 +40,41 @@ const depositAmount = async (req, res) => {
     }
 
     // Update the user's wallet balance
-    user.wallet.balance += depositAmount;
-    await user.save();
+    // user.wallet.balance += depositAmount;
+    // await user.save();
 
-    // MLM commission logic
-    const rewardLevels = [10, 5, 3]; 
-    let currentReferralCode = user.referredBy;
-    let level = 0;
+    const options = {
+      currency: "LTCT",
+      ipn_url: "",
+    };
 
-    while (currentReferralCode && level < 3) {
-      const referrer = await User.findOne({ referralCode: currentReferralCode });
+    const address = await client.getCallbackAddress(options);
 
-      if (!referrer) break;
+    // // MLM commission logic
+    // const rewardLevels = [10, 5, 3];
+    // let currentReferralCode = user.referredBy;
+    // let level = 0;
 
-      // Calculate bonus based on rank and level
-      const bonusPercentage = rewardLevels[level];
-      const bonusAmount = (depositAmount * bonusPercentage) / 100;
+    // while (currentReferralCode && level < 3) {
+    //   const referrer = await User.findOne({ referralCode: currentReferralCode });
 
-      if (bonusAmount > 0) {
-        referrer.wallet.balance += bonusAmount;
-        await referrer.save();
-      }
+    //   if (!referrer) break;
 
-      // Move to the next referral level
-      currentReferralCode = referrer.referredBy;
-      level++;
-    }
+    //   // Calculate bonus based on rank and level
+    //   const bonusPercentage = rewardLevels[level];
+    //   const bonusAmount = (depositAmount * bonusPercentage) / 100;
 
-    return res
-      .status(200)
-      .json({ message: "Deposit successful.", balance: user.wallet.balance });
+    //   if (bonusAmount > 0) {
+    //     referrer.wallet.balance += bonusAmount;
+    //     await referrer.save();
+    //   }
+
+    //   // Move to the next referral level
+    //   currentReferralCode = referrer.referredBy;
+    //   level++;
+    // }
+
+    return res.status(200).json({ message: "Deposit successful.", address });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error." });
